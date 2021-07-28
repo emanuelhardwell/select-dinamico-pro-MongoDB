@@ -62,30 +62,29 @@ const informacion = [
 export const ClavesConcepto = () => {
   let initialState = {
     clave: "",
-    concepto: "",
-    descripcion: "",
+    conceptoNombre: "",
     unidad: "",
     cantidad: "",
     total: "",
+    concepto: "",
   };
 
   const [arrayClaves, setArrayClaves] = useState([]);
   const [arrayProductos, setArrayProductos] = useState([]);
   const [data, setData] = useState(initialState);
-  const [productoId, setProductoId] = useState("");
 
-  let { clave, concepto, descripcion, unidad, cantidad, total } = data;
+  let { clave, conceptoNombre, unidad, cantidad, total, concepto } = data;
 
   const handleCargarProductos = (e) => {
     const opcion = e.target.value;
 
     setData({
       ...data,
-      concepto: "",
+      conceptoNombre: "",
       cantidad: "",
       total: "",
-      descripcion: "",
       unidad: "",
+      concepto: "",
     });
 
     const names = informacion.map((item) => item.clave.nombre);
@@ -106,21 +105,23 @@ export const ClavesConcepto = () => {
 
   const handleCargarTotal = (e) => {
     let cantidad = e.target.value;
-    let productoFinal = concepto;
+    let productoFinal = conceptoNombre;
 
     const resultado = arrayProductos.find(
       (item) => item.nombre === productoFinal || item.nombre === "otro"
     );
+    console.log(resultado);
     let res = resultado.precioUnitario * cantidad;
     let unidadFinal = resultado.unidad;
-    let productoIdFinal = resultado.unidad;
-    setProductoId(productoIdFinal);
+    let conceptoId = resultado._id;
+
     // console.log(unidadFinal);
     setData({
       ...data,
       cantidad: cantidad,
       total: res,
       unidad: unidadFinal,
+      concepto: conceptoId,
     });
   };
 
@@ -130,8 +131,8 @@ export const ClavesConcepto = () => {
       ...data,
       cantidad: "",
       total: "",
-      descripcion: "",
       unidad: "",
+      concepto: "",
     });
   };
 
@@ -145,14 +146,13 @@ export const ClavesConcepto = () => {
 
     if (
       clave === "" ||
+      conceptoNombre === "" ||
       concepto === "" ||
-      descripcion === "" ||
       unidad === "" ||
       cantidad === ""
     ) {
       return Swal.fire("Error", "Selecciona una clave y concepto", "error");
     }
-    data.productoId = productoId;
     console.log(data);
   };
 
@@ -191,8 +191,8 @@ export const ClavesConcepto = () => {
                     className="form-select"
                     id="floatingSelect2"
                     aria-label="Floating label select example"
-                    name="concepto"
-                    value={concepto}
+                    name="conceptoNombre"
+                    value={conceptoNombre}
                     onChange={handleInputChange}
                     onClick={handleVerificarProducto}
                   >
@@ -206,24 +206,10 @@ export const ClavesConcepto = () => {
                   <label htmlFor="floatingSelect2"> Articulos </label>
                 </div>
 
-                <h3> Descripción </h3>
-                <div className="form-floating mb-2">
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="floatingInput3"
-                    placeholder="a"
-                    name="descripcion"
-                    value={descripcion}
-                    onChange={handleInputChange}
-                  />
-                  <label htmlFor="floatingInput3"> Descripción </label>
-                </div>
-
                 <h3> Cantidad </h3>
                 <div className="form-floating mb-2">
                   <input
-                    disabled={concepto === "" ? true : false}
+                    disabled={conceptoNombre === "" ? true : false}
                     type="number"
                     className="form-control"
                     id="floatingInput9"
