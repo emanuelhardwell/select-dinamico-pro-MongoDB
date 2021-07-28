@@ -70,16 +70,17 @@ export const ClavesConcepto = () => {
   };
 
   const [arrayClaves, setArrayClaves] = useState([]);
-  const [arrayProductos, setArrayProductos] = useState([]);
-  const [data, setData] = useState(initialState);
+  const [arrayConceptos, setArrayConceptos] = useState([]);
+  const [presupuestos, setPresupuestos] = useState(initialState);
 
-  let { clave, conceptoNombre, unidad, cantidad, total, concepto } = data;
+  let { clave, conceptoNombre, unidad, cantidad, total, concepto } =
+    presupuestos;
 
   const handleCargarProductos = (e) => {
     const opcion = e.target.value;
 
-    setData({
-      ...data,
+    setPresupuestos({
+      ...presupuestos,
       conceptoNombre: "",
       cantidad: "",
       total: "",
@@ -97,27 +98,25 @@ export const ClavesConcepto = () => {
       (item) => item.clave.nombre === opcion
     );
     if (resultado !== undefined) {
-      //   const resultadoFinal = resultado.productos;
-      //   console.log(resultado);
-      setArrayProductos(resultado);
+      setArrayConceptos(resultado);
     }
   };
 
   const handleCargarTotal = (e) => {
     let cantidad = e.target.value;
-    let productoFinal = conceptoNombre;
+    let conceptoFinal = conceptoNombre;
 
-    const resultado = arrayProductos.find(
-      (item) => item.nombre === productoFinal || item.nombre === "otro"
+    const resultado = arrayConceptos.find(
+      (item) => item.nombre === conceptoFinal || item.nombre === "otro"
     );
-    console.log(resultado);
+    // console.log(resultado);
     let res = resultado.precioUnitario * cantidad;
     let unidadFinal = resultado.unidad;
     let conceptoId = resultado._id;
 
     // console.log(unidadFinal);
-    setData({
-      ...data,
+    setPresupuestos({
+      ...presupuestos,
       cantidad: cantidad,
       total: res,
       unidad: unidadFinal,
@@ -125,10 +124,10 @@ export const ClavesConcepto = () => {
     });
   };
 
-  // metodo que espera el cambio del SELECT de los productos
-  const handleVerificarProducto = (e) => {
-    setData({
-      ...data,
+  // metodo que espera el cambio del SELECT de los conceptos
+  const handleVerificarConcepto = (e) => {
+    setPresupuestos({
+      ...presupuestos,
       cantidad: "",
       total: "",
       unidad: "",
@@ -138,7 +137,7 @@ export const ClavesConcepto = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setData({ ...data, [name]: value });
+    setPresupuestos({ ...presupuestos, [name]: value });
   };
 
   const handleSubmitForm = (e) => {
@@ -153,7 +152,7 @@ export const ClavesConcepto = () => {
     ) {
       return Swal.fire("Error", "Selecciona una clave y concepto", "error");
     }
-    console.log(data);
+    console.log(presupuestos);
   };
 
   // return ********************************
@@ -164,7 +163,6 @@ export const ClavesConcepto = () => {
           <div className="card">
             <div className="card-body">
               <form onSubmit={handleSubmitForm}>
-                <h3> Categoria</h3>
                 <div className="form-floating mb-2">
                   <select
                     className="form-select"
@@ -182,10 +180,11 @@ export const ClavesConcepto = () => {
                       </option>
                     ))}
                   </select>
-                  <label htmlFor="floatingSelect"> Categorias </label>
+                  <label htmlFor="floatingSelect">
+                    <p className="fw-bold"> Claves </p>
+                  </label>
                 </div>
 
-                <h3>Productos</h3>
                 <div className="form-floating mb-2">
                   <select
                     className="form-select"
@@ -194,19 +193,20 @@ export const ClavesConcepto = () => {
                     name="conceptoNombre"
                     value={conceptoNombre}
                     onChange={handleInputChange}
-                    onClick={handleVerificarProducto}
+                    onClick={handleVerificarConcepto}
                   >
                     <option value=""> Selecciona tu concepto </option>
-                    {arrayProductos.map((item, i) => (
+                    {arrayConceptos.map((item, i) => (
                       <option key={i} value={item.nombre}>
                         {item.nombre}
                       </option>
                     ))}
                   </select>
-                  <label htmlFor="floatingSelect2"> Articulos </label>
+                  <label htmlFor="floatingSelect2">
+                    <p className="fw-bold"> Conceptos </p>
+                  </label>
                 </div>
 
-                <h3> Cantidad </h3>
                 <div className="form-floating mb-2">
                   <input
                     disabled={conceptoNombre === "" ? true : false}
@@ -224,9 +224,9 @@ export const ClavesConcepto = () => {
                   <label htmlFor="floatingInput9"> Cantidad </label>
                 </div>
 
-                <h3> total </h3>
                 <div className="form-floating mb-2">
                   <input
+                    disabled={true}
                     type="number"
                     className="form-control"
                     id="floatingInput1"
@@ -238,7 +238,6 @@ export const ClavesConcepto = () => {
                   <label htmlFor="floatingInput1"> Total </label>
                 </div>
 
-                <h3> Unidad </h3>
                 <div className="form-floating mb-2">
                   <input
                     disabled={true}
