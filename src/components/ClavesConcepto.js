@@ -62,7 +62,7 @@ const informacion = [
 export const ClavesConcepto = () => {
   let initialState = {
     clave: "",
-    producto: "",
+    concepto: "",
     descripcion: "",
     unidad: "",
     cantidad: "",
@@ -74,14 +74,14 @@ export const ClavesConcepto = () => {
   const [data, setData] = useState(initialState);
   const [productoId, setProductoId] = useState("");
 
-  let { clave, producto, descripcion, unidad, cantidad, total } = data;
+  let { clave, concepto, descripcion, unidad, cantidad, total } = data;
 
   const handleCargarProductos = (e) => {
     const opcion = e.target.value;
 
     setData({
       ...data,
-      producto: "",
+      concepto: "",
       cantidad: "",
       total: "",
       descripcion: "",
@@ -106,7 +106,7 @@ export const ClavesConcepto = () => {
 
   const handleCargarTotal = (e) => {
     let cantidad = e.target.value;
-    let productoFinal = producto;
+    let productoFinal = concepto;
 
     const resultado = arrayProductos.find(
       (item) => item.nombre === productoFinal || item.nombre === "otro"
@@ -143,17 +143,14 @@ export const ClavesConcepto = () => {
   const handleSubmitForm = (e) => {
     e.preventDefault();
 
-    if (clave === "" || clave === "-1" || clave === -1) {
-      return Swal.fire("Error", "Selecciona una clave y producto", "error");
-    }
-
     if (
-      producto === "" ||
+      clave === "" ||
+      concepto === "" ||
       descripcion === "" ||
       unidad === "" ||
       cantidad === ""
     ) {
-      return Swal.fire("Error", "Selecciona una clave y producto", "error");
+      return Swal.fire("Error", "Selecciona una clave y concepto", "error");
     }
     data.productoId = productoId;
     console.log(data);
@@ -178,7 +175,7 @@ export const ClavesConcepto = () => {
                     onChange={handleInputChange}
                     onClick={handleCargarProductos}
                   >
-                    <option value={-1}> Selecciona tu clave </option>
+                    <option value=""> Selecciona tu clave </option>
                     {arrayClaves.map((item, i) => (
                       <option key={i} value={item}>
                         {item}
@@ -194,12 +191,12 @@ export const ClavesConcepto = () => {
                     className="form-select"
                     id="floatingSelect2"
                     aria-label="Floating label select example"
-                    name="producto"
-                    value={producto}
+                    name="concepto"
+                    value={concepto}
                     onChange={handleInputChange}
                     onClick={handleVerificarProducto}
                   >
-                    <option value=""> Selecciona tu producto </option>
+                    <option value=""> Selecciona tu concepto </option>
                     {arrayProductos.map((item, i) => (
                       <option key={i} value={item.nombre}>
                         {item.nombre}
@@ -226,7 +223,7 @@ export const ClavesConcepto = () => {
                 <h3> Cantidad </h3>
                 <div className="form-floating mb-2">
                   <input
-                    disabled={producto === "" ? true : false}
+                    disabled={concepto === "" ? true : false}
                     type="number"
                     className="form-control"
                     id="floatingInput9"
